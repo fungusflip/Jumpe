@@ -25,7 +25,7 @@ public class CharacterMove : MonoBehaviour
     {
         if (rg.velocity.magnitude == 0)
         {
-            Stopped = true;
+            firstStopped = true;
             firstJump = true;
         }
         else
@@ -39,7 +39,7 @@ public class CharacterMove : MonoBehaviour
 
         }
 
-        if (Stopped == true)
+        if (firstStopped == true)
         {
         
         }
