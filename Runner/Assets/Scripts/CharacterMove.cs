@@ -10,7 +10,8 @@ public class CharacterMove : MonoBehaviour
     [SerializeField] float moveForce = 10.0f; // Adjust this value to control the force magnitude
     [SerializeField] private float moveSpeed;
     [SerializeField] private Transform cameraPos;
-    private bool Stopped = false;
+    private bool firstStopped = false;
+    private bool firstJump = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,12 +26,22 @@ public class CharacterMove : MonoBehaviour
         if (rg.velocity.magnitude == 0)
         {
             Stopped = true;
+            firstJump = true;
         }
-        Debug.Log(Stopped);
+        else
+        {
+            firstJump == false;
+
+        }
+
+        if (firstJump ==true)
+        {
+
+        }
 
         if (Stopped == true)
         {
-            rg.add
+        
         }
     }
 }
