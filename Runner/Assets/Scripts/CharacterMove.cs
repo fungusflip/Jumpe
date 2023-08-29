@@ -30,11 +30,11 @@ public class CharacterMove : MonoBehaviour
         }
         else
         {
-            firstJump == false;
+            firstJump = false;
 
         }
 
-        if (firstJump ==true)
+        if (firstJump == true)
         {
 
         }
