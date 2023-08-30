@@ -12,6 +12,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/CharacterMove.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Spike.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -51,7 +52,7 @@
       <workItem from="1693381222705" duration="17000" />
       <workItem from="1693381258108" duration="8314000" />
       <workItem from="1693396403893" duration="1948000" />
-      <workItem from="1693399592767" duration="1012000" />
+      <workItem from="1693399592767" duration="3633000" />
     </task>
     <servers />
   </component>
