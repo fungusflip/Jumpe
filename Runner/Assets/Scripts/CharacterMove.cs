@@ -9,11 +9,11 @@ public class CharacterMove : MonoBehaviour
     [SerializeField] private Transform targetTransform;
     [SerializeField] private Transform CameraPos;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpHeight;
+    [SerializeField] private float smoothTime = 0.3f;
     private bool firstStopped = false;
-    private bool firstJump = false;
     private GameObject cameraObject;
     private Vector3 currentVelocity = Vector3.zero;
-    [SerializeField] private float smoothTime = 0.3f;
 
     // Start is called before the first frame update
     void Start()
@@ -54,15 +54,19 @@ public class CharacterMove : MonoBehaviour
         if (firstStopped)
         {
             rg.velocity = new Vector2(moveSpeed, rg.velocity.y);
-            Vector3 newCameraPosition = Vector3.SmoothDamp(
+            cameraObject.transform.position = Vector3.SmoothDamp(
                 cameraObject.transform.position,
                 new Vector3(CameraPos.position.x, CameraPos.position.y, cameraObject.transform.position.z),
                 ref currentVelocity,
                 smoothTime
             );
+            
 
-            // Update the camera's position
-            cameraObject.transform.position = newCameraPosition;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rg.velocity = new Vector2(rg.velocity.x, jumpHeight);
+            }
         }
     }
 }
