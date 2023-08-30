@@ -4,44 +4,65 @@ using UnityEngine;
 
 public class CharacterMove : MonoBehaviour
 {
-    private Rigidbody2D rg; // Note the corrected spelling of "Rigidbody"
+    private Rigidbody2D rg;
 
     [SerializeField] private Transform targetTransform;
-    [SerializeField] float moveForce = 10.0f; // Adjust this value to control the force magnitude
+    [SerializeField] private Transform CameraPos;
     [SerializeField] private float moveSpeed;
-    [SerializeField] private Transform cameraPos;
     private bool firstStopped = false;
     private bool firstJump = false;
+    private GameObject cameraObject;
+    private Vector3 currentVelocity = Vector3.zero;
+    [SerializeField] private float smoothTime = 0.3f;
 
     // Start is called before the first frame update
     void Start()
     {
+        // For my headache and this is probably going to be a mobile game if it was something to be used + we don't need more frames!
+        Application.targetFrameRate = 60;
+
+        cameraObject = GameObject.FindWithTag("MainCamera");
         rg = GetComponent<Rigidbody2D>();
+        
+        // For StartPos
         rg.velocity = targetTransform.position - transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Coroutine for delayed start
+    private IEnumerator WaitForDelay()
     {
+        rg.velocity = transform.up * 3;
+        
+        yield return new WaitForSeconds(2);
+
+        firstStopped = true;
+        Debug.Log(firstStopped);
+        
+        yield return new WaitForSeconds(1);
+    }
+
+    // FixedUpdate is called once per fixed frame update
+    void FixedUpdate()
+    {
+        // Movement Block
         if (rg.velocity.magnitude == 0)
         {
-            firstStopped = true;
-            firstJump = true;
-        }
-        else
-        {
-            firstJump = false;
-
+            StartCoroutine(WaitForDelay());
         }
 
-        if (firstJump == true)
+        // Movement Block and CameraBlock
+        if (firstStopped)
         {
+            rg.velocity = new Vector2(moveSpeed, rg.velocity.y);
+            Vector3 newCameraPosition = Vector3.SmoothDamp(
+                cameraObject.transform.position,
+                new Vector3(CameraPos.position.x, CameraPos.position.y, cameraObject.transform.position.z),
+                ref currentVelocity,
+                smoothTime
+            );
 
-        }
-
-        if (firstStopped == true)
-        {
-        
+            // Update the camera's position
+            cameraObject.transform.position = newCameraPosition;
         }
     }
 }
