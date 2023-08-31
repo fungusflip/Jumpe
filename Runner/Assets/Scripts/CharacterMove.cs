@@ -6,67 +6,83 @@ public class CharacterMove : MonoBehaviour
 {
     private Rigidbody2D rg;
 
-    [SerializeField] private Transform targetTransform;
-    [SerializeField] private Transform CameraPos;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private Transform startPosTransform;
+    [SerializeField] private Transform cameraPos;
+    [SerializeField] private Vector3 offset = new Vector3(0f, 0f, 0f);
+    [SerializeField] public float moveSpeed;
     [SerializeField] private float jumpHeight;
-    [SerializeField] private float smoothTime = 0.3f;
+    [SerializeField] public float smoothTime;
     private bool firstStopped = false;
+    private bool isJumping = true;
+    public bool goal = false;
     private GameObject cameraObject;
     private Vector3 currentVelocity = Vector3.zero;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         // For my headache and this is probably going to be a mobile game if it was something to be used + we don't need more frames!
         Application.targetFrameRate = 60;
-
+        
         cameraObject = GameObject.FindWithTag("MainCamera");
         rg = GetComponent<Rigidbody2D>();
-        
-        // For StartPos
-        rg.velocity = targetTransform.position - transform.position;
+        rg.velocity = startPosTransform.position - transform.position;
     }
 
-    // Coroutine for delayed start
+    // Coroutine for FIRST YIPPIE
     private IEnumerator WaitForDelay()
     {
-        rg.velocity = transform.up * 3;
+        rg.velocity = transform.up * 5;
         
         yield return new WaitForSeconds(2);
 
         firstStopped = true;
-        Debug.Log(firstStopped);
         
         yield return new WaitForSeconds(1);
     }
-
-    // FixedUpdate is called once per fixed frame update
+    
     void FixedUpdate()
     {
-        // Movement Block
+        Vector3 newPosition = transform.position + (offset);
+        cameraPos.position = newPosition;
+        // Movement Block for the FIRST YIPPIE
         if (rg.velocity.magnitude == 0)
         {
             StartCoroutine(WaitForDelay());
         }
 
-        // Movement Block and CameraBlock
+        // Movement Block and CameraBlock for THE FIRST VROOM!!!!!
         if (firstStopped)
         {
             rg.velocity = new Vector2(moveSpeed, rg.velocity.y);
+            
+            if(!goal){
             cameraObject.transform.position = Vector3.SmoothDamp(
                 cameraObject.transform.position,
-                new Vector3(CameraPos.position.x, CameraPos.position.y, cameraObject.transform.position.z),
+                new Vector3(cameraPos.position.x, cameraPos.position.y, cameraObject.transform.position.z),
                 ref currentVelocity,
                 smoothTime
             );
-            
-
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                rg.velocity = new Vector2(rg.velocity.x, jumpHeight);
             }
+            
+            //we can rotate untill the raycast maybe can feel ground?
+            if (Input.GetKeyDown(KeyCode.Space)&& !isJumping)
+            {
+                
+                rg.velocity = new Vector2(rg.velocity.x, jumpHeight);
+                rg.angularVelocity = -143;
+                isJumping = true;
+                
+            }
+        }
+    }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check for collision with ground or obstacle
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
         }
     }
 }
