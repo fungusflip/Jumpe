@@ -133,6 +133,7 @@ MonoBehaviour:
   moveSpeed: 10
   jumpHeight: 6.5
   smoothTime: 0.3
+  goal: 0
 --- !u!1 &6221739945735254504
 GameObject:
   m_ObjectHideFlags: 0

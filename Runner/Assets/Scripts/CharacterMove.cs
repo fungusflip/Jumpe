@@ -21,9 +21,6 @@ public class CharacterMove : MonoBehaviour
 
     void Start()
     {
-        // For my headache and this is probably going to be a mobile game if it was something to be used + we don't need more frames!
-        Application.targetFrameRate = 60;
-        
         cameraObject = GameObject.FindWithTag("MainCamera");
         rg = GetComponent<Rigidbody2D>();
         rg.velocity = startPosTransform.position - transform.position;
@@ -41,7 +38,7 @@ public class CharacterMove : MonoBehaviour
         yield return new WaitForSeconds(1);
     }
     
-    void FixedUpdate()
+    void Update()
     {
         Vector3 newPosition = transform.position + (offset);
         cameraPos.position = newPosition;
@@ -56,26 +53,36 @@ public class CharacterMove : MonoBehaviour
         {
             rg.velocity = new Vector2(moveSpeed, rg.velocity.y);
             
-            if(!goal){
-            cameraObject.transform.position = Vector3.SmoothDamp(
-                cameraObject.transform.position,
-                new Vector3(cameraPos.position.x, cameraPos.position.y, cameraObject.transform.position.z),
-                ref currentVelocity,
-                smoothTime
-            );
-            }
-            
             //we can rotate untill the raycast maybe can feel ground?
             if (Input.GetKeyDown(KeyCode.Space)&& !isJumping)
             {
                 
                 rg.velocity = new Vector2(rg.velocity.x, jumpHeight);
-                rg.angularVelocity = -143;
+                rg.angularVelocity = -136;
                 isJumping = true;
                 
             }
+            
+
         }
+        
     }
+
+    void FixedUpdate()
+        {
+            if (firstStopped){
+                if (!goal)
+                {
+                    cameraObject.transform.position = Vector3.SmoothDamp(
+                        cameraObject.transform.position,
+                        new Vector3(cameraPos.position.x, cameraPos.position.y, cameraObject.transform.position.z),
+                        ref currentVelocity,
+                        smoothTime
+                    );
+                }
+            }
+        }
+    
     
     private void OnCollisionEnter2D(Collision2D collision)
     {

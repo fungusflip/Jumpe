@@ -3,23 +3,31 @@ using UnityEngine.SceneManagement;
 
 public class Hurt : MonoBehaviour
 {
-private string activeSceneName; 
+private string activeSceneName;
+public GameObject ui;
 
-void Start()
+private void Start()
 {
-    Scene activeScene = SceneManager.GetActiveScene();
+
+    var activeScene = SceneManager.GetActiveScene();
     activeSceneName = activeScene.name; 
 }
 
 private void OnTriggerEnter2D(Collider2D collider)
 {
-    Transform colliderTransform = collider.transform.parent;
-    GameObject parentGameObject = colliderTransform.gameObject;
-
+    var colliderTransform = collider.transform.parent;
+    var parentGameObject = colliderTransform.gameObject;
+    var script = ui.GetComponent<DeathCount>();
+    int deathCount = PlayerPrefs.GetInt("deathCount");
+    
     if (collider.CompareTag("Player"))
     {
         Destroy(parentGameObject);
         SceneManager.LoadScene(activeSceneName);
+        deathCount++;
+        script.SetDeathCount(deathCount);
     }
+    
 }
+
 }

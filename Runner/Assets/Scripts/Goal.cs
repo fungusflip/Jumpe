@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class Goal : MonoBehaviour
 {
     [SerializeField] private GameObject Character;
+    [SerializeField] private GameObject WinUI;
+    [SerializeField] private GameObject WinNumber;
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -11,6 +13,8 @@ public class Goal : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             script.goal = true;
+            WinUI.SetActive(true);
+            WinNumber.SetActive(false);
         }
     }
 }
